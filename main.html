@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script>
+        window.requirejs.config({
+            enforceDefine: true,
+            paths: {
+                'SDK': './lib/SDK.min'
+            }
+        });
+        window.requirejs(['SDK'], function (SDK) {
+            if (typeof SDK !== 'undefined') {
+                console.log("SDK is defined. Trying to initialize...");
+                SDK.init();
+                SDK.ready().then(() => {
+                    console.log("SDK is ready");
+                });
+
+            } else {
+                console.log('SDK is not defined');
+            }
+        });
+    </script>
+    <style>
+        body {
+            background-color: rgb(46, 148, 225);
+            color: white;
+            margin: 10px;
+            font-family: "Segoe UI VSS (Regular)", "-apple-system", BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .response-text {
+            font-size: 1.5em;
+            color: white;
+        }
+
+        .title-text {
+            color: rgb(255, 255, 255);
+        }
+
+        .link-item {
+            color: #f2eaea;
+            /* Adjust text color as desired */
+            text-decoration: none;
+            /* Remove underline */
+            padding: 5px 10px;
+            /* Add padding for spacing */
+            border-radius: 3px;
+            /* Add rounded corners */
+            margin-bottom: 5px;
+            /* Add spacing between links */
+            display: inline-block;
+            /* Allow links to fit side-by-side */
+            font-size: 1.5em;
+        }
+
+        .link-item:hover {
+            background-color: #7f7f7f;
+            /* Add hover effect */
+            cursor: pointer;
+            /* Indicate clickable link */
+        }
+
+        .button {
+            /* Your button styles here */
+            background-color: #7f7f7f;
+            /* Green color */
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        #myForm {
+            background-color: rgb(46, 148, 225);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        /* Style for the labels */
+        label {
+            display: inline-block;
+            width: 140px;
+            color: white;
+        }
+
+        /* Style for the input fields */
+        input[type="text"] {
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 id="mainTitle" class="title-text">Test Cases Stored in Azure Container</h1>
+    <div id="linkContainer"></div>
+    <script src="callDevOps.js"></script>
+    <script src="storeValue.js"></script>
+    <script>
+        getValue("urlBlob").then(resultUrl => {
+            console.log("Obtained resulturl:", resultUrl);
+            getValue("sas").then(resultSAS => {
+                console.log("Obtained resultSAS:", resultSAS);
+                getValue("urlTraceviewer").then(resultTraceViewerUrl => {
+                    callAzureDevOpsAPI(resultUrl, resultSAS, resultTraceViewerUrl);
+                });
+            });
+        });
+    </script>
+    <br>
+    <br>
+
+    <form id="myForm">
+        <label for="urlBlob">Blob URL:</label>
+        <input type="text" id="urlBlob" name="urlBlob">
+        <br>
+        <label for="sas">SAS:</label>
+        <input type="text" id="sas" name="sas">
+        <br>
+        <label for="traceviewerUrl:">TraceViewer URL:</label>
+        <input type="text" id="traceviewerUrl" name="traceviewerUrl">
+        <br>
+        <button type="submit" class="button">Save config</button>
+        <div id="output"></div>
+    </form>
+
+    <script>
+        const form = document.getElementById('myForm');
+        const output = document.getElementById('output');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const urlBlob = document.getElementById('urlBlob').value;
+            const sas = document.getElementById('sas').value;
+            const traceviewerUrl = document.getElementById('traceviewerUrl').value;
+            // Clear previous output if any
+            output.innerHTML = '';
+
+            const formData = `
+            <h2>Configuration is saved</h2>
+            `;
+
+            output.innerHTML = formData;
+
+
+            if (sas) {
+                storeValue("sas", sas);
+            }
+
+            if (urlBlob) {
+                storeValue("urlBlob", urlBlob);
+            }
+
+            if (traceviewerUrl) {
+                storeValue("urlTraceviewer", traceviewerUrl);
+            }
+        });
+    </script>
+</body>
+
+</html>
