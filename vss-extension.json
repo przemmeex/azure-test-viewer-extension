@@ -1,0 +1,57 @@
+{
+    "manifestVersion": 1,
+    "id": "PUT_SOME_ID",
+    "publisher": "PUT_PUBLISHER",
+    "version": "0.0.1",
+    "name": "My First Extension",
+    "description": "A sample Visual Studio Services extension",
+    "public": false,
+    "categories": ["Azure Repos"],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "my-hub",
+            "type": "ms.vss-web.hub",
+            "targets": [
+                "ms.vss-work-web.work-hub-group"
+            ],
+            "properties": {
+                "name": "Test Cases Container",
+                "uri": "main.html",
+                "iconAsset": "PUT_PUBLISHER.PUT_SOME_ID/images/logo.png",
+                "_sharedData": {
+                    "assets": [
+                        "PUT_PUBLISHER.PUT_SOME_ID/images/logo.png"
+                    ]
+                }
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "main.html",
+            "addressable": true
+        },
+        {
+            "path": "images/logo.png",
+            "addressable": true
+        },
+        {
+            "path": "callDevOps.js",
+            "addressable": true
+        },
+        {
+            "path": "storeValue.js",
+            "addressable": true
+        },
+        {
+            "path": "node_modules/azure-devops-extension-sdk",
+            "addressable": true,
+            "packagePath": "lib"
+        }
+    ]
+}
